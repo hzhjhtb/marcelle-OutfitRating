@@ -1,0 +1,23 @@
+/** @typedef {typeof __propDef.props}  TabListProps */
+/** @typedef {typeof __propDef.events}  TabListEvents */
+/** @typedef {typeof __propDef.slots}  TabListSlots */
+export default class TabList extends SvelteComponentTyped<{}, {
+    [evt: string]: CustomEvent<any>;
+}, {
+    default: {};
+}> {
+}
+export type TabListProps = typeof __propDef.props;
+export type TabListEvents = typeof __propDef.events;
+export type TabListSlots = typeof __propDef.slots;
+import { SvelteComponentTyped } from "svelte";
+declare const __propDef: {
+    props: {};
+    events: {
+        [evt: string]: CustomEvent<any>;
+    };
+    slots: {
+        default: {};
+    };
+};
+export {};
