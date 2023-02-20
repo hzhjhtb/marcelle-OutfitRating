@@ -12,6 +12,7 @@ ShoesInput.title = 'Uploead Shoes';
 // featureExtractor.title = 'Feature Extractor';
 // const trainingSet = marcelle.dataset('TrainingSet');
 // const model = 
+// test of github
 
 // Additional widgets and visualizations
 const texture_label = marcelle.textInput();
