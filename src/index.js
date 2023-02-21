@@ -74,7 +74,7 @@ const $instances = capture.$click
 	  .awaitPromises();
   	
 
-// Dataset
+// Training Set
 const store = marcelle.dataStore('localStorage');
 const trainingSet = marcelle.dataset('TrainingSet', store);
 const trainingSetBrowser = marcelle.datasetBrowser(trainingSet);
@@ -105,7 +105,11 @@ const $predictions = predictButton.$click
     	return regresser.predict(features);
   	})
   	.awaitPromises();
-	
+
+const result = marcelle.text('Waiting for predictions...');
+result.title = 'Prediction for this outfit';
+
+$predictions.subscribe((x) => { result.$value.set(parseInt(x)); });
 
 // Dashboard
 const myDashboard = marcelle.dashboard({
@@ -126,6 +130,6 @@ myDashboard
 	.page('Test outfit rating system')
 	.sidebar(UpperInput, LowerInput, ShoesInput, featureExtractor)
 	.use([UpperDisplay, LowerDisplay, ShoesDisplay])
-	.use(predictButton);
+	.use([predictButton, result]);
   
 myDashboard.show();
