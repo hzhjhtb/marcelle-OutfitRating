@@ -1,18 +1,59 @@
 import '@marcellejs/core/dist/marcelle.css';
 import * as marcelle from '@marcellejs/core';
 
+// function concatImageData(imageData1, imageData2, imageData3) {
+// 	const canvas = document.createElement('canvas');
+// 	const ctx = canvas.getContext('2d');
+// 	canvas.width = imageData1.width + imageData2.width + imageData3.width;
+// 	canvas.height = imageData1.height;
+  
+// 	const newImageData = ctx.createImageData(canvas.width, canvas.height);
+  
+// 	for (let y = 0; y < imageData1.height; y++) {
+// 		for (let x = 0; x < imageData1.width; x++) {
+// 			const i = (y * imageData1.width + x) * 4;
+// 			newImageData.data[i] = imageData1.data[i];
+// 			newImageData.data[i+1] = imageData1.data[i+1];
+// 			newImageData.data[i+2] = imageData1.data[i+2];
+// 			newImageData.data[i+3] = imageData1.data[i+3];
+// 		}
+// 	}
+  
+// 	for (let y = 0; y < imageData2.height; y++) {
+// 	  	for (let x = 0; x < imageData2.width; x++) {
+// 			const i = (y * imageData2.width + x) * 4;
+// 			const j = (y * newImageData.width + x + imageData1.width) * 4;
+// 			newImageData.data[j] = imageData2.data[i];
+// 			newImageData.data[j+1] = imageData2.data[i+1];
+// 			newImageData.data[j+2] = imageData2.data[i+2];
+// 			newImageData.data[j+3] = imageData2.data[i+3];
+// 	  	}
+// 	}
+  
+// 	for (let y = 0; y < imageData3.height; y++) {
+// 	  	for (let x = 0; x < imageData3.width; x++) {
+// 			const i = (y * imageData3.width + x) * 4;
+// 			const j = (y * newImageData.width + x + imageData1.width + imageData2.width) * 4;
+// 			newImageData.data[j] = imageData3.data[i];
+// 			newImageData.data[j+1] = imageData3.data[i+1];
+// 			newImageData.data[j+2] = imageData3.data[i+2];
+// 			newImageData.data[j+3] = imageData3.data[i+3];
+// 	  	}
+// 	}
+  
+// 	return newImageData;
+// 	} 
+
+
 // Images Input
 const UpperInput = marcelle.imageUpload(Image={ width: 224, height: 224 });
 UpperInput.title = 'Upload Upper body';
-UpperInput.$images.subscribe((Upper_img) => { console.log('Upper_img', Upper_img); });
 
 const LowerInput = marcelle.imageUpload(Image={ width: 224, height: 224 });
 LowerInput.title = 'Uploead Lower body';
-LowerInput.$images.subscribe((Lower_img) => { console.log('Lower_img', Lower_img); });
 
 const ShoesInput = marcelle.imageUpload(Image={ width: 224, height: 224 });
 ShoesInput.title = 'Uploead Shoes';
-ShoesInput.$images.subscribe((Shoes_img) => { console.log('Shoes_img', Shoes_img); });
 
 
 // Display Images Input
@@ -29,15 +70,12 @@ ShoesDisplay.title = 'Shoes';
 // Texts Input
 const texture_label = marcelle.textInput();
 texture_label.title = 'texture score';
-texture_label.$value.subscribe((texture_input) => { console.log('texture_label:', texture_input);} );
 
 const color_label = marcelle.textInput();
 color_label.title = 'color score';
-color_label.$value.subscribe((color_input) => { console.log('color_label:', color_input);} );
 
 const shape_label = marcelle.textInput();
 shape_label.title = 'shape score';
-shape_label.$value.subscribe((shape_input) => { console.log('shape_label:', shape_input);} );
 
 
 // Feature Extractor for Images input
@@ -50,10 +88,11 @@ const capture = marcelle.button('Click to record an instance');
 capture.title = 'Capture this outfit to training set';
 
 const $instances = capture.$click
-  .sample(UpperInput.$images)
-  .map(async (Upper_img) => ({
-    x: await featureExtractor.process(Upper_img),
-    y: [texture_label.$value.get(), color_label.$value.get(), shape_label.$value.get()],
+	.sample(UpperInput.$images)
+//   .sample(UpperInput.$images, LowerInput.$images, ShoesInput.$images)
+  .map(async (img) => ({
+    x: await featureExtractor.process(img),
+    y: parseInt(texture_label.$value.get()),
     thumbnail: UpperInput.$thumbnails.get(),
   }))
   .awaitPromises();
