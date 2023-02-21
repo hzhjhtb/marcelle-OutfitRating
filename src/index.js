@@ -55,7 +55,33 @@ LowerInput.title = 'Uploead Lower body';
 const ShoesInput = marcelle.imageUpload(Image={ width: 224, height: 224 });
 ShoesInput.title = 'Uploead Shoes';
 
+Promise.all([
+	new Promise(resolve => { UpperInput.$images.onload = resolve }),
+	new Promise(resolve => { LowerInput.$images.onload = resolve }),
+	new Promise(resolve => { ShoesInput.$images.onload = resolve }),
+  ]).then(() => {
+	
+	const canvas = document.createElement('canvas');
 
+	// set canvas dimensions to fit all images
+	canvas.width = UpperInput.$images.width + LowerInput.$images.width + ShoesInput.$images.width;
+	canvas.height = Math.max(UpperInput.$images.height, LowerInput.$images.height, ShoesInput.$images.height);
+  
+	// get the canvas context
+	const ctx = canvas.getContext('2d');
+  
+	// draw the images onto the canvas
+	ctx.drawImage(UpperInput.$images, 0, 0);
+	ctx.drawImage(LowerInput.$images, UpperInput.$images.width, 0);
+	ctx.drawImage(ShoesInput.$images, UpperInput.$images.width + LowerInput.$images.width, 0);
+  
+	// convert canvas to stream image
+	canvas.toBlob(blob => {
+	  // do something with the resulting blob
+	  console.log(blob);
+	}, 'image/png');
+  });
+  
 // Display Images Input
 const UpperDisplay = marcelle.imageDisplay(UpperInput.$images);
 UpperDisplay.title = 'Upper body';
