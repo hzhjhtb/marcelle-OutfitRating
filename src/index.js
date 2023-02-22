@@ -45,14 +45,8 @@ ShoesDisplay.title = 'Shoes';
 
 
 // Texts Input
-const texture_label = marcelle.textInput();
-texture_label.title = 'texture score';
-
-const color_label = marcelle.textInput();
-color_label.title = 'color score';
-
-const shape_label = marcelle.textInput();
-shape_label.title = 'shape score';
+const score_label = marcelle.textInput();
+score_label.title = 'Outfit Score';
 
 
 // Feature Extractor for Images input
@@ -68,7 +62,7 @@ const $instances = capture.$click
   	.sample(UpperInput.$images)
 	.map(async (img1) => ({
 		x: await featureExtractor.process(concatImageData(img1, LowerInput.$images.get(), ShoesInput.$images.get())),
-		y: parseInt(texture_label.$value.get()),
+		y: parseInt(score_label.$value.get()),
 		thumbnail : imageDataToDataURL(concatImageData(img1, LowerInput.$images.get(), ShoesInput.$images.get()))
 	}))
 	  .awaitPromises();
@@ -122,7 +116,7 @@ myDashboard
 	.page('Train outfit rating system')
 	.sidebar(UpperInput, LowerInput, ShoesInput, featureExtractor)
 	.use([UpperDisplay, LowerDisplay, ShoesDisplay])
-	.use([texture_label, color_label, shape_label, capture])
+	.use([score_label, capture])
 	.use(trainingSetBrowser, trainButton, progress);
 
 // Second Page
